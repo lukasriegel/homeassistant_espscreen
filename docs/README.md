@@ -39,6 +39,7 @@
 - [WAVESHARE4B.md](WAVESHARE4B.md): the Waveshare ESP32-S3-Touch-LCD-4B.
 - [WAVESHARE4V4.md](WAVESHARE4V4.md): the Waveshare ESP32-S3-Touch-LCD-4, revision 4.0 (without the "B").
 - [WAVESHARE43C.md](WAVESHARE43C.md): the Waveshare ESP32-S3-Touch-LCD-4.3C, the 4.3-inch glass with the 7B's expander.
+- [WAVESHAREC6216.md](WAVESHAREC6216.md): the Waveshare ESP32-C6-Touch-AMOLED-2.16, CO5300 AMOLED and CST9220 touch.
 - [WAVESHARE5.md](WAVESHARE5.md): the Waveshare ESP32-S3-Touch-LCD-5, the 4.3-inch's board with 5-inch glass.
 - [WAVESHAREP4.md](WAVESHAREP4.md): the Waveshare ESP32-P4-86-Panel-ETH-2RO, 4 inch, 720 × 720, using Wi-Fi.
 - [WAVESHAREP47B.md](WAVESHAREP47B.md): the Waveshare ESP32-P4-WIFI6-Touch-LCD-7B, 7 inch, rev3 ESP32-P4.

@@ -18,6 +18,7 @@ ESPHome Device Builder is optional:
 | Guition, 4 inch | ESP32-S3-4848S040, 480×480, ST7701S and GT911 |
 | Waveshare, 4.3 inch | ESP32-S3-Touch-LCD-4.3, 800×480, ST7262 and GT911, 16 MB or 8 MB flash (New screen asks which) |
 | Waveshare, 4.3 inch 4.3C (experimental) | ESP32-S3-Touch-LCD-4.3C (not the 4.3), 800×480, ST7262 and GT911, CH32V003 expander ([details](WAVESHARE43C.md)) |
+| Waveshare, 2.16 inch AMOLED (experimental) | ESP32-C6-Touch-AMOLED-2.16, 480×480, CO5300 and CST9220, 16 MB flash without PSRAM ([details](WAVESHAREC6216.md)) |
 | Waveshare, 5 inch (new) | ESP32-S3-Touch-LCD-5 (not the 5B), 800×480, RGB and GT911 ([details](WAVESHARE5.md)) |
 | Guition, 5 inch (experimental) | JC8048W550C_I (the capacitive variant only), 800×480, ST7262 RGB and GT911 ([details](JC8048W550.md)) |
 | Waveshare, 7 inch (experimental) | ESP32-S3-Touch-LCD-7, 800×480, RGB and GT911 |

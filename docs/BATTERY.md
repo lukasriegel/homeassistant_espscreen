@@ -45,6 +45,11 @@ Power chips such as the AXP2101 of the M5Stack Core2 v1.1 and CoreS3 come as com
 charging flag of their own: give the level `device_class: battery` and, when the charging flag is a binary sensor,
 `device_class: battery_charging`.
 
+The Waveshare C6 2.16-inch AMOLED uses this repository's `axp2101` component for
+the power chip's battery percentage and charging flag. A missing battery reports
+an unknown percentage. Its ALDO rails come from the board's wiring, while charging
+parameters retain the factory policy ([board details](WAVESHAREC6216.md)).
+
 ### A voltage and a formula
 
 Many boards put the battery on an ADC pin through a voltage divider of two resistors, because a pin takes at most about

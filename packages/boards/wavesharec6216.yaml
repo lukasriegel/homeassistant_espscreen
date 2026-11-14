@@ -1,0 +1,102 @@
+# ESP Screens - Waveshare ESP32-C6-Touch-AMOLED-2.16 (SKU 34201/34202).
+# Wiring from Waveshare's Arduino 09_LVGL_V9_Test and schematic.
+# docs/WAVESHAREC6216.md lists the hardware acceptance still needed.
+esphome:
+  min_version: 2026.9.0
+
+packages:
+  build: !include ../hardware/esp-idf.yaml
+  look: !include ../looks/compact.yaml
+  touch: !include ../features/capacitive-touch.yaml
+  backlight: !include ../features/backlight.yaml
+  self_test: !include ../features/self-test.yaml
+
+substitutions:
+  BOARD_ID: "wavesharec6216"
+  DEVICE_NAME: "wavesharec6216-new"
+  DEVICE_FRIENDLY_NAME: "My Waveshare AMOLED"
+  PANEL_W: "480"
+  PANEL_H: "480"
+  DISPLAY_DPI: "314.270"
+  GRID_COLS: "1"
+  GRID_ROWS: "2"
+  # An eighth of an RGB565 frame, 57,600 bytes, without PSRAM.
+  LVGL_BUFFER_SIZE: "12%"
+  DISPLAY_DATA_RATE: "40MHz"
+
+esp32:
+  board: esp32-c6-devkitc-1
+  variant: esp32c6
+  flash_size: 16MB
+
+i2c:
+  - id: touch_bus
+    sda: GPIO8
+    scl: GPIO7
+    frequency: 400kHz
+
+axp2101:
+  - id: screen_pmu
+    i2c_id: touch_bus
+    address: 0x34
+    aldo_voltage: 3300
+    # The manufacturer's display reset cycles its ALDO3 supply.
+    aldo_mask: 0x04
+    reset_mask: 0x04
+    battery_level:
+      name: Battery Level
+      device_class: battery
+    battery_charging:
+      name: Battery Charging
+      device_class: battery_charging
+
+spi:
+  - id: lcd
+    type: quad
+    clk_pin: GPIO0
+    data_pins: [GPIO1, GPIO2, GPIO3, GPIO4]
+
+display:
+  - platform: mipi_spi
+    id: my_display
+    spi_id: lcd
+    model: CO5300
+    cs_pin: GPIO15
+    data_rate: ${DISPLAY_DATA_RATE}
+    draw_rounding: 2
+    # Panel tuning from the manufacturer's bsp_lvgl_port.cpp. ESPHome owns
+    # pixel format and orientation, so its MADCTL and COLMOD remain in use.
+    init_sequence:
+      - delay 200ms
+      - delay 200ms
+      - delay 200ms
+      - [0xFE, 0x20]
+      - [0x19, 0x10]
+      - [0x1C, 0xA0]
+      - [0xFE, 0x00]
+      - [0x35, 0x00]
+      - [0x63, 0xFF]
+    dimensions:
+      width: 480
+      height: 480
+    update_interval: never
+    auto_clear_enabled: false
+
+# AMOLED brightness uses DCS, through the shared backlight output contract.
+output:
+  - platform: template
+    id: gpio_backlight_pwm
+    type: float
+    write_action:
+      - lambda: id(my_display).set_brightness(static_cast<uint8_t>(state * 255.0f));
+
+touchscreen:
+  - platform: cst9220
+    id: ts_touch
+    i2c_id: touch_bus
+    reset_pin: GPIO11
+    update_interval: 20ms
+    # Vendor's native mapping, once before LVGL rotation.
+    transform:
+      swap_xy: true
+      mirror_x: true
