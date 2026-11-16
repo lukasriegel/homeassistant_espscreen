@@ -13,6 +13,9 @@ numbers.
 ## The files
 
 This fork fetches generated packages, components and fonts from its own repository.
+Its development image sets `SCREEN_CHANNEL=dev`, which takes precedence over
+Home Assistant's repository identifier. A stable release must clear the Dockerfile
+channel default so release tags are selected again.
 The app computes Home Assistant repository identifiers from that URL, so adding
 the repository with `#dev` selects dev for new screens. The fork dev app also
 repairs the failed experimental Waveshare C6 2.16 profile written by its earlier

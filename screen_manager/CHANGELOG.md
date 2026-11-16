@@ -1,5 +1,7 @@
 ## Unreleased
 
+- The fork development image explicitly selects dev for firmware builds even when Home Assistant reports another repository identifier.
+
 - The fork dev app repairs existing experimental Waveshare C6 2.16 profiles that the earlier app wrote against upstream main, preserving Wi-Fi and keys.
 
 - Fork installations from `#dev` now fetch firmware packages, components and fonts from this fork on dev instead of upstream main.
