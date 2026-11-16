@@ -3482,11 +3482,11 @@
    "circle": 79,
    "gap": 8,
    "gap_y": 4,
-   "margin": 9,
+   "margin": 28,
    "page_bar": 79,
    "radius": 40,
    "tile_pad": 18,
-   "top": 71
+   "top": 90
   },
   "tier": "full",
   "wide_slots": false,
@@ -9260,11 +9260,11 @@
    "circle": 79,
    "gap": 8,
    "gap_y": 4,
-   "margin": 9,
+   "margin": 28,
    "page_bar": 79,
    "radius": 40,
    "tile_pad": 18,
-   "top": 71
+   "top": 90
   },
   "tier": "full",
   "wide_slots": false,
@@ -11566,11 +11566,11 @@
    "circle": 79,
    "gap": 8,
    "gap_y": 4,
-   "margin": 9,
+   "margin": 28,
    "page_bar": 79,
    "radius": 40,
    "tile_pad": 18,
-   "top": 71
+   "top": 90
   },
   "tier": "full",
   "wide_slots": false,

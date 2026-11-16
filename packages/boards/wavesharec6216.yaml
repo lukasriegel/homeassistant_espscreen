@@ -18,6 +18,9 @@ substitutions:
   PANEL_W: "480"
   PANEL_H: "480"
   DISPLAY_DPI: "314.270"
+  # Rounded visible corners clip the compact look's 9 px header margin on glass.
+  # Keep the full 480 x 480 canvas, with a 28 px (2.26 mm) margin for page content.
+  GRID_MARGIN: "28"
   GRID_COLS: "1"
   GRID_ROWS: "2"
   # An eighth of an RGB565 frame, 57,600 bytes, without PSRAM.

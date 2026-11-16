@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Waveshare C6 2.16 page content uses a larger margin to keep the header and navigation away from the display's rounded corners. Hardware confirmation is pending.
+
 - The fork development image explicitly selects dev for firmware builds even when Home Assistant reports another repository identifier.
 
 - The fork dev app repairs existing experimental Waveshare C6 2.16 profiles that the earlier app wrote against upstream main, preserving Wi-Fi and keys.

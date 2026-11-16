@@ -15,6 +15,13 @@ rows, with up to eight pages and 64 tiles subject to the screen's memory budget.
 The diagonal gives 314.270 dpi and about 38.8 mm per side. The LVGL draw buffer is
 an eighth of an RGB565 frame, 57,600 bytes. These are calculated sizes, not heap measurements.
 
+The visible aperture has rounded corners. The board keeps the full 480 × 480
+panel and uses a 28-pixel page margin, about 2.26 mm, instead of the compact
+look's 9 pixels. Photos of a running screen showed the home icon and the last
+clock digit clipped at the top corners with the smaller margin. The larger
+margin moves the top bar, tiles and page navigation inward; confirmation of
+this margin on glass is still required. The editor uses the same generated sizes.
+
 The panel takes brightness through its DCS command rather than a PWM pin. The
 shared brightness, standby, night mode and alert controls use the same output
 contract as other screens. Zero brightness needs to be checked on glass. No PSRAM

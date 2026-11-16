@@ -39,6 +39,11 @@ for a new panel from the nearest real board; its sizes come from the look (docs/
 
 ## One margin for the whole page
 
+A panel with rounded visible corners can override `GRID_MARGIN` in its board
+file while keeping its full pixel resolution. The Waveshare C6 2.16 uses 28
+pixels after its 9-pixel compact margin clipped top-bar ink in hardware photos.
+The generated editor geometry follows the same override.
+
 Since firmware 0.14.0 the page keeps one margin all round. The top bar keeps `GRID_MARGIN` from the sides of the
 glass and from its top edge (measured to the home key, the bar's tallest ink), the cards keep it from the sides, and
 the page keys put the ink of their chevrons on it (`runtime_tiles::nav_align`). The page bar is the look's own
