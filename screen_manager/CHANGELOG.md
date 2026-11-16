@@ -1,5 +1,7 @@
 ## Unreleased
 
+- The fork dev app repairs existing experimental Waveshare C6 2.16 profiles that the earlier app wrote against upstream main, preserving Wi-Fi and keys.
+
 - Fork installations from `#dev` now fetch firmware packages, components and fonts from this fork on dev instead of upstream main.
 
 - Experimental support for Waveshare ESP32-C6-Touch-AMOLED-2.16: 480 × 480 AMOLED, capacitive touch, brightness and battery reporting. Physical hardware acceptance is pending.

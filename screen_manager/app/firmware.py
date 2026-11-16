@@ -456,11 +456,24 @@ class Firmware:
         text = raw.replace('\r\n', '\n')
         before = yaml.load(text, Loader=LenientLoader)
         packages = before.get('packages') if isinstance(before, dict) else None
+        # The first fork app wrote this experimental board against upstream main, where its package does not
+        # exist. Repair that specific failed profile in the fork dev app; other upstream screens stay theirs.
+        migrated = False
+        upstream = 'https://github.com/MaxGramser/homeassistant_espscreen'
+        display = packages.get('display') if isinstance(packages, dict) else None
+        if (channel() == 'dev' and branch == 'dev' and isinstance(display, dict)
+                and display.get('url') == upstream and display.get('ref') == 'main'
+                and display.get('files') == ['packages/wavesharec6216.yaml']):
+            expected = deepcopy(before)
+            expected['packages']['display']['url'] = REPO
+            candidate = text.replace(upstream, REPO)
+            if yaml.load(candidate, Loader=LenientLoader) == expected:
+                text, before, packages, migrated = candidate, expected, expected['packages'], True
         ours = [key for key, entry in packages.items() if isinstance(entry, dict) and REPO in str(entry.get('url', ''))] \
             if isinstance(packages, dict) else []
         if not ours or any(not our_ref(packages[key].get('ref')) for key in ours):
             return False
-        changed = False
+        changed = migrated
         line = re.compile(r'(?m)^([ \t]+ref:[ \t]*)(["\']?)(main|dev|screens-v\d+\.\d+\.\d+)\2([ \t]*(?:#.*)?)$')
         for key in ours:
             if packages[key]['ref'] == branch:

@@ -141,6 +141,28 @@ class Branch(unittest.TestCase):
         self.assertTrue(self.firmware.set_branch(path.name, 'dev'))
         self.assertEqual(path.read_bytes().decode(), ON_DEV.replace('\n', '\r\n'))
 
+    def test_failed_experimental_fork_profile_is_repaired_on_start(self):
+        upstream = 'https://github.com/MaxGramser/homeassistant_espscreen'
+        old = SCREEN.replace(REPO, upstream).replace('packages/guition.yaml', 'packages/wavesharec6216.yaml')
+        path = self.write(old.replace('\n', '\r\n'))
+        set_channel('dev')
+        self.assertIn(path.name, self.firmware.follow_release())
+        expected = ON_DEV.replace('packages/guition.yaml', 'packages/wavesharec6216.yaml')
+        self.assertEqual(path.read_bytes().decode(), expected.replace('\n', '\r\n'))
+        self.assertEqual(self.firmware.follow_release(), [])
+
+    def test_upstream_profiles_and_custom_refs_are_preserved(self):
+        upstream = 'https://github.com/MaxGramser/homeassistant_espscreen'
+        for channel, board, branch in (('dev', 'guition', 'main'), ('main', 'wavesharec6216', 'main'),
+                                       ('dev', 'wavesharec6216', 'custom')):
+            with self.subTest(channel=channel, board=board, branch=branch):
+                text = (SCREEN.replace(REPO, upstream).replace('packages/guition.yaml', f'packages/{board}.yaml')
+                        .replace('ref: main', f'ref: {branch}'))
+                path = self.write(text)
+                set_channel(channel)
+                self.assertFalse(self.firmware.set_branch(path.name, core.ref()))
+                self.assertEqual(path.read_text(), text)
+
     def test_a_ref_the_owner_chose_stays(self):
         for index, text in enumerate((SCREEN.replace('ref: main', 'ref: 0.4.83'),
                                       SCREEN.replace('ref: main', 'ref: 3f2a9c1'),

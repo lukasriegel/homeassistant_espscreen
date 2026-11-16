@@ -14,10 +14,13 @@ numbers.
 
 This fork fetches generated packages, components and fonts from its own repository.
 The app computes Home Assistant repository identifiers from that URL, so adding
-the repository with `#dev` selects dev for new screens. Existing YAML pointing
-to upstream must be corrected separately: keep the Wi-Fi and keys, set the
-display package URL to the fork and both `ref` and `GITHUB_REF` to `dev`.
-The dev-channel test verifies channel detection and the generated installation URL.
+the repository with `#dev` selects dev for new screens. The fork dev app also
+repairs the failed experimental Waveshare C6 2.16 profile written by its earlier
+version against upstream main, on startup or before a build. It changes the
+display package URL and sets both `ref` and `GITHUB_REF` to `dev`, keeping the
+Wi-Fi, keys, overrides and formatting. Other upstream boards and custom refs
+stay as they are. The dev-channel test verifies channel detection, generated
+URLs and repair of an existing profile, including unchanged keys and line endings.
 
 | Folder | What a file there holds | Who includes it |
 |---|---|---|
