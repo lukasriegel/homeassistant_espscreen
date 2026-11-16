@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Colour light controls shrink their rows on dense compact screens so the brightness slider stays visible below colour and temperature.
+
 - Waveshare C6 2.16 page content uses a larger margin to keep the header and navigation away from the display's rounded corners. Hardware confirmation is pending.
 
 - The fork development image explicitly selects dev for firmware builds even when Home Assistant reports another repository identifier.

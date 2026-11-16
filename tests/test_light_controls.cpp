@@ -6,6 +6,20 @@
 // Assistant's attributes reach the tile through page_receiver.cpp; the card keeps nothing of its own.
 int main() {
   using namespace light_controls;
+  // A dense 480-square compact screen must show brightness below colour and temperature.
+  // The old minimum added a full touch target to the label and pushed the final track off glass.
+  ui::configure(314, "compact");
+  const int top = ui::px(52), foot = ui::px(8), gap = ui::px(5);
+  const int room = 480 - top - foot;
+  const int pitch = row_pitch(room, ui::px(60), gap, 31, 3);
+  assert(top + 3 * pitch - gap <= 480 - foot);
+  assert(pitch - gap >= ui::touch_min());
+  assert(pitch - gap >= 31 + ui::px(12) + ui::px(10));
+  // Reference compact and standard screens retain their existing pitch.
+  ui::configure(143, "compact");
+  assert(row_pitch(300, 60, 5, 14, 3) == 66);
+  ui::configure(170, "standard");
+  assert(row_pitch(400, 122, 12, 22, 3) == 122);
   Values v;
   // A white shade waits for the light's own range, a sane one.
   assert(!v.temperature_ready());

@@ -39,6 +39,14 @@ for a new panel from the nearest real board; its sizes come from the look (docs/
 
 ## One margin for the whole page
 
+The colour light page shrinks its row pitch to the room below the header. A row
+keeps at least one 7 mm touch target or the height of its label and minimum track,
+whichever is larger, plus the row gap. It does not add a second full touch target
+below the label. At 314 dpi on a 480-square compact screen, the three rows fit
+with a 119-pixel pitch and a 108-pixel card instead of overflowing the bottom.
+`tests/test_light_controls.cpp` checks the final row stays inside the canvas and
+the reference looks keep their requested pitch. Confirmation on glass is required.
+
 A panel with rounded visible corners can override `GRID_MARGIN` in its board
 file while keeping its full pixel resolution. The Waveshare C6 2.16 uses 28
 pixels after its 9-pixel compact margin clipped top-bar ink in hardware photos.

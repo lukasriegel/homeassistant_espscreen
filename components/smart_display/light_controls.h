@@ -14,6 +14,17 @@
 
 namespace light_controls {
 inline int clamp(int value, int low, int high) { return std::max(low, std::min(high, value)); }
+// A row includes its words and track inside one finger-sized card, not a finger plus a label.
+// The gap belongs to the pitch, so even the smallest card retains its full touch height.
+inline int row_pitch(int room, int wanted, int gap, int text_h, int count) {
+  count = std::max(1, count);
+  const int fitting = std::min(wanted, (room + gap) / count);
+  const int original = std::max(ui::touch_min() + text_h + ui::px(12), fitting);
+  if (count * original - gap <= room) return original;
+  const int track_min = ui::px(ui::large() ? 18 : 10);
+  const int least = std::max(ui::touch_min(), text_h + ui::px(12) + track_min) + gap;
+  return std::max(least, fitting);
+}
 // What the rows show: the light as its tile holds it, a wish included. `color` and `temperature` say which of the
 // first two rows it has (its colour modes); brightness is 0 while it is off.
 struct Values {
@@ -173,9 +184,8 @@ inline void setup(lv_obj_t *parent, const lv_font_t *font, int width, int height
   // on (a 800 x 480 panel at 217 dpi asked for 122 x 1.28 = 156 px a row and ran off the bottom). Three rows
   // are two pitches and one card: the last row needs no gap under it, which is why the gap counts once more.
   const int wanted = ui::px(large ? 122 : 60), gap = ui::px(large ? 12 : 5);
-  const int least = ui::touch_min() + lv_font_get_line_height(font) + ui::px(12);
   const int room = height - top - ui::px(large ? 18 : 8);
-  spacing = std::max(least, std::min(wanted, (room + gap) / (3 + extra)));
+  spacing = row_pitch(room, wanted, gap, lv_font_get_line_height(font), 3 + extra);
   row_gap = gap; glass_h = height;
   int margin = ui::px(large ? 20 : 12), w = width - 2 * margin, card_h = spacing - gap;
   int inset = ui::px(large ? 18 : 10), text_y = ui::px(large ? 14 : 5), track_h = ui::px(large ? 32 : 18);
