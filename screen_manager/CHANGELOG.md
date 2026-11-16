@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Long settings groups scroll vertically below a fixed header. Entity detail, colour-light and effects pages also gain scrolling when their fitted content still exceeds the screen. Physical gesture acceptance is pending.
+
 - Colour light controls shrink their rows on dense compact screens so the brightness slider stays visible below colour and temperature.
 
 - Waveshare C6 2.16 page content uses a larger margin to keep the header and navigation away from the display's rounded corners. Hardware confirmation is pending.

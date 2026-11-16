@@ -5799,6 +5799,7 @@ inline void show_detail(unsigned index){
   // A card that leaves room sits in the middle of the glass; a picture fills it and stays where it is.
   // The back key and the name stay at the top of the card; the content under them is centred.
   if(kind==overlay_card::controls&&!detail_placed)overlay_card::centre(detail_root,2);
+  overlay_card::scroll_if_needed(detail_root, detail_bar::bottom() + ui::px(4));
 }
 }
 
@@ -6084,6 +6085,7 @@ inline void colour_draw(const std::string &title, const light_controls::Values &
 #else
   (void) below;
 #endif
+  overlay_card::scroll_if_needed(card, detail_bar::bottom() + ui::px(4), 4);
   lv_obj_move_foreground(colour_root);
 }
 inline void colour_open(Tile &t) {

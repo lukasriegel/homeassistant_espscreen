@@ -21,6 +21,8 @@
 //
 // The model (rows, stepping, the texts) is free of LVGL so tests/test_settings_screen.cpp covers it
 // on a PC; the drawing below it is behind SETTINGS_SCREEN_TEST.
+// Longer groups use overlay_card's scrolling body with a fixed header. Native LVGL
+// tests in tests/lvgl prove clipping, scrolling and preserved control handlers.
 namespace settings_screen {
 
 // Values that are not part of the persisted `screen_settings::Settings` block, because that format is
@@ -530,6 +532,8 @@ inline int tap_limit = 0;
 // The page while it is on screen; nothing of it exists when it is closed, which is how a 320x240
 // board with 60 KB of free heap can afford a settings page at all.
 inline lv_obj_t *root = nullptr, *hold_area = nullptr, *hold_bar = nullptr;
+inline lv_obj_t *scroll_body = nullptr;
+inline uint8_t scroll_page = 0;
 inline uint8_t current_page = 0, first_row = 0;
 inline int confirm_row = -1;             // the action row that asked "tap again"
 inline lv_timer_t *confirm_timer = nullptr;
@@ -539,7 +543,7 @@ struct Drawn {
   uint8_t row = 0;
   bool lit = false;   // drawn in the accent: a row that asks, or an action that runs
 };
-inline std::array<Drawn, 8> drawn{};
+inline std::array<Drawn, 12> drawn{};
 inline uint8_t drawn_count = 0;
 
 inline bool visible() { return root != nullptr; }
@@ -733,19 +737,13 @@ inline void back_event(lv_event_t *) {
   first_row = 0;
   draw();
 }
-inline uint8_t rows_per_page = 1;
-inline void pager_step(int step) {
-  int next = (int) first_row + step * (int) rows_per_page;
-  if (next < 0) return;
-  first_row = (uint8_t) next;
-  forget_confirm();
-  draw();
-}
 
 // ---- drawing ----
 inline void draw() {
   if (!root) return;
   Metrics m = metrics();
+  const int scroll = scroll_body && scroll_page == current_page ? lv_obj_get_scroll_y(scroll_body) : 0;
+  scroll_body = nullptr;
   lv_obj_clean(root);
   drawn_count = 0;
 
@@ -759,14 +757,9 @@ inline void draw() {
   // The top bar of every page a tap opens (detail_bar): the back key and the page's name.
   detail_bar::make(root, page_title(page), {detail_bar::BACK, back_event});
 
-  int span = m.height - m.rows_y - m.bottom;
-  bool paged = false;
-  // The pager every page shares (page_bar) stands on the foot of the glass, over the bottom margin.
-  const int pager = page_bar::height() - m.bottom + m.gap;
-  uint8_t per_page = std::min<uint8_t>(fitting_rows(span, m.row_h, m.gap, pager, count, paged), drawn.size());
-  rows_per_page = per_page;
-  // Always start a page on a page boundary, and never scroll a group that fits.
-  first_row = paged && first_row < count ? (uint8_t) ((first_row / per_page) * per_page) : 0;
+  // Draw this settings group once; a body below its fixed header scrolls only when the rows exceed the glass.
+  const uint8_t per_page = std::min<size_t>(count, drawn.size());
+  first_row = 0;
 
   int label_h = lv_font_get_line_height(row_font);
   for (uint8_t slot = 0; slot < per_page && first_row + slot < count; ++slot) {
@@ -849,9 +842,9 @@ inline void draw() {
   }
   refresh();
 
-  if (!paged) return;
-  // The pager every page shares (page_bar.h), the tile pages' own in the same place, so it is the one already learned.
-  page_bar::show(page_bar::make(root, pager_step), first_row / per_page, (count + per_page - 1) / per_page);
+  scroll_body = overlay_card::scroll_if_needed(root, detail_bar::bottom() + ui::px(4));
+  scroll_page = current_page;
+  if (scroll_body) lv_obj_scroll_to_y(scroll_body, scroll, LV_ANIM_OFF);
 }
 
 inline void hide_hold_bar() {
@@ -883,6 +876,7 @@ inline void close() {
   forget_confirm();
   drawn_count = 0;
   if (root) { lv_obj_delete(root); root = nullptr; }
+  scroll_body = nullptr;
 }
 
 // A change of look while the page is open (Dark mode is one of its rows): the page is drawn again in place.

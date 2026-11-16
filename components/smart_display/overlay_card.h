@@ -1,13 +1,15 @@
 #pragma once
 // The frame every overlay gets: the card a tap opens (a light, a thermostat, a blind, a vacuum, a graph).
 //
-// Two rules, and they hold on every board:
+// Shared layout rules on every board:
 //
 //  * **The content is never wider than a hand spans.** A thermostat whose − and + sit at the far edges of a
 //    ten-inch panel takes two hands; ui::control_max_width is the width one hand does span, and a card wider
 //    than that keeps that width. On a CYD and a Guition nothing is capped: their glass is narrower already.
 //  * **What is capped, is centred.** A card that does not fill the glass sits in the middle of it, left to
 //    right and top to bottom, like a dialog. Not centring it would leave it stuck against a corner.
+//  * Content that still overflows after fitting scrolls below a fixed header.
+//    tests/lvgl tests that seam with real widgets, without Home Assistant actions.
 //
 // A card that is a *picture* or a *graph* says so and is not capped: the media card's cover art, a camera's
 // image and a day of a sensor are all nicer the bigger they are, and none of them is worked with a finger
@@ -20,6 +22,7 @@
 // track may look thin, but its touch area is grown to the finger's size (`overlay_card::touchable`).
 #include <algorithm>
 #include <cstdint>
+#include <vector>
 #include "lvgl.h"
 #include "ui_scale.h"
 
@@ -116,6 +119,46 @@ inline void centre(lv_obj_t *root, uint32_t pinned = 0) {
     if (child && !lv_obj_has_flag(child, LV_OBJ_FLAG_HIDDEN) && !lv_obj_has_flag(child, LV_OBJ_FLAG_FLOATING))
       lv_obj_set_y(child, lv_obj_get_y(child) + shift);
   }
+}
+
+// Last resort after a card has fitted its controls: clip and scroll only its body.
+// Header children and FLOATING page navigation remain direct children of the root,
+// so scrolling cannot move them or paint content over them. Reparenting preserves
+// the existing widgets, bindings and action handlers; no duplicate controls are made.
+inline lv_obj_t *scroll_if_needed(lv_obj_t *root, int header_bottom, uint32_t pinned = 2) {
+  if (!root) return nullptr;
+  lv_obj_update_layout(root);
+  int foot = screen_height() - pad(), bottom = 0;
+  std::vector<lv_obj_t *> content;
+  for (uint32_t i = pinned; i < lv_obj_get_child_count(root); ++i) {
+    auto *child = lv_obj_get_child(root, i);
+    if (!child) continue;
+    const int y = lv_obj_get_y(child), end = y + lv_obj_get_height(child);
+    if (lv_obj_has_flag(child, LV_OBJ_FLAG_FLOATING)) { foot = std::min(foot, y); continue; }
+    // Extra top-bar keys are built after the name but occupy the same header band.
+    if (end <= header_bottom) continue;
+    content.push_back(child);
+    if (!lv_obj_has_flag(child, LV_OBJ_FLAG_HIDDEN)) bottom = std::max(bottom, end);
+  }
+  if (bottom <= foot || content.empty() || foot <= header_bottom) return nullptr;
+  auto *body = lv_obj_create(root);
+  lv_obj_remove_style_all(body);
+  lv_obj_set_pos(body, 0, header_bottom);
+  lv_obj_set_size(body, lv_obj_get_content_width(root), foot - header_bottom);
+  lv_obj_add_flag(body, static_cast<lv_obj_flag_t>(LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_CLICKABLE));
+  lv_obj_remove_flag(body, static_cast<lv_obj_flag_t>(LV_OBJ_FLAG_SCROLL_ELASTIC | LV_OBJ_FLAG_SCROLL_CHAIN_VER | LV_OBJ_FLAG_GESTURE_BUBBLE));
+  lv_obj_set_scroll_dir(body, LV_DIR_VER);
+  lv_obj_set_scrollbar_mode(body, LV_SCROLLBAR_MODE_AUTO);
+  for (auto *child : content) {
+    const int x = lv_obj_get_x(child), y = lv_obj_get_y(child);
+    const int w = lv_obj_get_width(child), h = lv_obj_get_height(child);
+    lv_obj_set_parent(child, body);
+    lv_obj_set_align(child, LV_ALIGN_TOP_LEFT);
+    lv_obj_set_pos(child, x, y - header_bottom);
+    lv_obj_set_size(child, w, h);
+  }
+  lv_obj_update_layout(body);
+  return body;
 }
 
 // A row a finger works inside a card that fills the glass: never wider than a hand spans, and in the middle

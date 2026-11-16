@@ -39,6 +39,20 @@ for a new panel from the nearest real board; its sizes come from the look (docs/
 
 ## One margin for the whole page
 
+Detail pages first use their existing fitting rules: gaps and decorative parts
+give room before controls shrink below readable text or a finger-sized target.
+After drawing, `overlay_card::scroll_if_needed()` clips overflowing content into
+a vertical viewport below the fixed title and back key. Header action keys and
+floating navigation stay outside that viewport. The colour light page, standard
+entity detail pages and effects page share this fallback. Settings draws the
+whole current group and uses the same viewport when needed. Long groups of
+devices remain paged to bound the number of widgets in memory.
+
+The native LVGL test in `tests/lvgl` checks that fitting content creates no
+viewport, overflow can be scrolled to the final control, the header and footer
+remain fixed, and control handlers survive moving into the viewport. Physical
+acceptance still needs vertical swipes, slider drags and back navigation on glass.
+
 The colour light page shrinks its row pitch to the room below the header. A row
 keeps at least one 7 mm touch target or the height of its label and minimum track,
 whichever is larger, plus the row gap. It does not add a second full touch target

@@ -11,6 +11,13 @@ firmware's map, with the add-on where the firmware's layers end at it.
 
 ## The layers, from the panel up
 
+Detail-page layout uses one overflow seam in `overlay_card.h`: fitted content
+that still exceeds the canvas moves into a clipped vertical body, while the
+header and floating navigation remain on the root. It preserves existing
+widgets and bindings. Entity cards, colour lights, effects and settings share
+it; device-group pagination still bounds widget memory. `tests/lvgl` checks
+the seam with real LVGL objects. See docs/RESPONSIVE.md for the fitting order.
+
 ```
   Home Assistant ──── add-on (screen_manager) ──── editor (web)
                           │  pictures, streams, layouts, events, the hello

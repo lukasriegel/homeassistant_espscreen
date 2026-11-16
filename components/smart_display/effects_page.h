@@ -537,6 +537,7 @@ inline void draw() {
       lv_obj_add_event_cb(slider, slider_event, LV_EVENT_ALL, reinterpret_cast<void *>(static_cast<intptr_t>(i)));
     }
   }
+  overlay_card::scroll_if_needed(root, detail_bar::bottom() + ui::px(4));
 }
 // A state of the light while its page is open: rows follow Home Assistant, a row just chosen keeps its choice a
 // moment, a slider under a finger is left alone.

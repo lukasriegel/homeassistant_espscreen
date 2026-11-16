@@ -11,6 +11,19 @@ Work on dev is proven at level 4, on the screens a change concerns; a release ru
 
 ## 1. The fast checks: `tools/check.sh`
 
+The detail-page overflow test uses real LVGL 9 objects without drawing a screen
+or contacting Home Assistant. With an existing LVGL 9 source checkout, run:
+
+```sh
+cmake -S tests/lvgl -B /tmp/tessera-overlay-tests -DLVGL_SOURCE_DIR=/path/to/lvgl
+cmake --build /tmp/tessera-overlay-tests --target test_overlay_scroll -j 4
+ctest --test-dir /tmp/tessera-overlay-tests --output-on-failure
+```
+
+It checks fitting and overflowing content, fixed headers and footers, vertical
+scroll reach and preservation of widget handlers. It does not prove finger
+gestures, panel clipping or slider handling on physical glass.
+
 One command, the same on a laptop and in CI (`.github/workflows/ci.yml` runs it on every push to main, every pull
 request, each night and on a release's commit). On a development machine run it with `PYTHON=.venv-portal/bin/python`. It needs aiohttp, PyYAML, Pillow,
 fontTools and jinja2, and stops when one is missing, because a skipped test proves nothing. In order:

@@ -101,10 +101,12 @@ unknown and takes no changes until it is back.
 ## The rules the page follows
 
 - **Two levels, never three.** A group page is the deepest place a setting can live.
-- **No free scrolling.** A group that does not fit gets the same pager as the tile pages: a chevron in each
-  half of the bar and a dot per page between them (firmware 0.2.69+). How many rows fit is measured on
-  the glass (`fitting_rows()` in `settings_screen.h`): a 320x240 board shows five rows, a 480x480 board six;
-  with the pager four and five.
+- **Long groups scroll vertically.** The title and back key stay fixed. All rows
+  of the current group are built together, up to its twelve-row limit, and the
+  shared `overlay_card::scroll_if_needed()` creates a clipped body only when
+  the rows exceed the room below the header. Redrawing the same group preserves
+  its scroll position; entering another group starts at the top. Tile pages
+  and groups of devices keep their existing pagination.
 - **A row is a control, not a form.** Toggles flip on tap, numbers and times have `-` and `+`, a choice
   cycles through its options in a chip on the right.
 - **A row that depends on a switch above it is greyed out, not hidden**, so the page never jumps around.
