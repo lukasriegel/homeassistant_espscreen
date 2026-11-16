@@ -12,6 +12,13 @@ numbers.
 
 ## The files
 
+This fork fetches generated packages, components and fonts from its own repository.
+The app computes Home Assistant repository identifiers from that URL, so adding
+the repository with `#dev` selects dev for new screens. Existing YAML pointing
+to upstream must be corrected separately: keep the Wi-Fi and keys, set the
+display package URL to the fork and both `ref` and `GITHUB_REF` to `dev`.
+The dev-channel test verifies channel detection and the generated installation URL.
+
 | Folder | What a file there holds | Who includes it |
 |---|---|---|
 | `packages/core.yaml` | Everything every screen shares: the LVGL tree (tiles, cards, overlays, the touch test page), the scripts, the API actions, the entities, the fonts, the globals, the Rotation select. It names no board and no hardware, and gives a default for every value a board may change. | The entry files |

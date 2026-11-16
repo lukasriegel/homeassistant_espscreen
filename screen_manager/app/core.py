@@ -99,7 +99,7 @@ FULL_PAGE_MIN_FIRMWARE = (0, 2, 62)
 # Twenty tiles from firmware 0.2.7, ten before.
 TWENTY_TILES_MIN_FIRMWARE = (0, 2, 7)
 FIRST_MAX_TILES = 10
-REPO = 'https://github.com/MaxGramser/homeassistant_espscreen'
+REPO = 'https://github.com/lukasriegel/homeassistant_espscreen'
 # The branch a screen's YAML builds its board package from. Which boards there are is boards.json's (BOARD_KEYS).
 REF = 'main'
 # The app's channel (docs/RELEASING.md, "Testing dev"): the branch of this repository the app was added from. The
@@ -109,7 +109,8 @@ REF = 'main'
 # spelling of the URL) has no channel: new screens build from main, existing ones keep the `ref:` they have. Without a
 # Supervisor (Docker, docs/DOCKER.md) SCREEN_CHANNEL names it, which the image GitHub builds from dev carries
 # (.github/workflows/docker.yml); unset, there is none.
-CHANNELS = {'ec8ae0ed': 'main', 'fa6a7b50': 'dev'}
+CHANNELS = {hashlib.sha1((REPO + suffix).lower().encode()).hexdigest()[:8]: branch
+            for suffix, branch in (('', 'main'), ('#dev', 'dev'))}
 CHANNEL = None
 
 def channel_of(slug):

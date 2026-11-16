@@ -60,11 +60,11 @@ class Channel(unittest.TestCase):
 
     def test_the_slug_says_which_url_the_app_came_from(self):
         # The Supervisor's hash (supervisor/store/utils.py): the first eight of sha1 of the URL as added, lower case.
-        url = 'https://github.com/MaxGramser/homeassistant_espscreen'
-        self.assertEqual(hashlib.sha1(url.lower().encode()).hexdigest()[:8], 'ec8ae0ed')
-        self.assertEqual(hashlib.sha1((url + '#dev').lower().encode()).hexdigest()[:8], 'fa6a7b50')
-        self.assertEqual(channel_of('ec8ae0ed_esp_screen_manager'), 'main')
-        self.assertEqual(channel_of('fa6a7b50_esp_screen_manager'), 'dev')
+        url = REPO
+        self.assertEqual(hashlib.sha1(url.lower().encode()).hexdigest()[:8], 'a14dcdcd')
+        self.assertEqual(hashlib.sha1((url + '#dev').lower().encode()).hexdigest()[:8], '16e0f2b9')
+        self.assertEqual(channel_of('a14dcdcd_esp_screen_manager'), 'main')
+        self.assertEqual(channel_of('16e0f2b9_esp_screen_manager'), 'dev')
         for slug in ('local_esp_screen_manager', '1234abcd_esp_screen_manager', 'esp_screen_manager', '', None):
             with self.subTest(slug):
                 self.assertIsNone(channel_of(slug))
@@ -77,7 +77,7 @@ class Channel(unittest.TestCase):
             with self.subTest(value):
                 self.assertIsNone(core.start_channel(None, {'SCREEN_CHANNEL': value}))
         self.assertIsNone(core.start_channel(None, {}))
-        self.assertEqual(core.start_channel('fa6a7b50_esp_screen_manager', {'SCREEN_CHANNEL': 'main'}), 'dev')
+        self.assertEqual(core.start_channel('16e0f2b9_esp_screen_manager', {'SCREEN_CHANNEL': 'main'}), 'dev')
         self.assertIsNone(core.start_channel('local_esp_screen_manager', {'SCREEN_CHANNEL': 'dev'}))
         # The image of a push to dev is built with CHANNEL=dev and keeps it; every other build leaves it empty.
         workflow = yaml.safe_load((ROOT / '.github/workflows/docker.yml').read_text())
@@ -95,6 +95,7 @@ class Channel(unittest.TestCase):
                 set_channel(channel)
                 screen = load(installation_yaml(data))
                 self.assertEqual(screen['packages']['display']['ref'], ref)
+                self.assertEqual(screen['packages']['display']['url'], REPO)
                 # The components and fonts follow; main is the package's own default and needs no line.
                 self.assertEqual(screen['substitutions'].get('GITHUB_REF'), 'dev' if ref == 'dev' else None)
 
@@ -105,9 +106,11 @@ class Channel(unittest.TestCase):
                 continue
             with self.subTest(path.name):
                 self.assertEqual(entry['substitutions']['GITHUB_REF'], 'main')
+                self.assertEqual({source['source']['url'] for source in entry['external_components']}, {REPO + '.git'})
                 self.assertEqual({source['source']['ref'] for source in entry['external_components']}, {'${GITHUB_REF}'})
                 if 'FONT_DIR' in entry['substitutions']:
                     self.assertIn('/${GITHUB_REF}/fonts', entry['substitutions']['FONT_DIR'])
+                    self.assertIn('raw.githubusercontent.com/lukasriegel/homeassistant_espscreen/', entry['substitutions']['FONT_DIR'])
 
 
 class Branch(unittest.TestCase):

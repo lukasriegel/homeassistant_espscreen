@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Fork installations from `#dev` now fetch firmware packages, components and fonts from this fork on dev instead of upstream main.
+
 - Experimental support for Waveshare ESP32-C6-Touch-AMOLED-2.16: 480 × 480 AMOLED, capacitive touch, brightness and battery reporting. Physical hardware acceptance is pending.
 
 ## 0.4.97 (firmware 0.60.0)
