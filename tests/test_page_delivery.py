@@ -68,6 +68,28 @@ class Screen:
 
 
 class DeliveryTests(unittest.IsolatedAsyncioTestCase):
+    async def test_home_icon_is_negotiated_per_screen_and_reset_with_next_layout(self):
+        async def newer(message):
+            answer = await self.screen.send(message)
+            if message['op'] == 'hello':
+                answer['features'] = ['home_icon']
+                answer['appearance_updates'] = 1
+            return answer
+        self.sender = Sender(newer)
+        self.record['layout']['homeIcon'] = 'home'
+        await self.sync()
+        self.assertEqual(self.screen.begin['home_icon'], int(tile_icons.GLYPHS['home'], 16))
+        # The reset must use a full transaction even when appearance updates are available.
+        del self.record['layout']['homeIcon']
+        await self.sync()
+        self.assertNotIn('home_icon', self.screen.begin)
+
+    async def test_old_firmware_keeps_default_without_losing_saved_home_icon(self):
+        self.record['layout']['homeIcon'] = 'home'
+        await self.sync()
+        self.assertNotIn('home_icon', self.screen.begin)
+        self.assertEqual(self.record['layout']['homeIcon'], 'home')
+
     async def enable_appearance_updates(self):
         async def newer(message):
             answer = await self.screen.send(message)

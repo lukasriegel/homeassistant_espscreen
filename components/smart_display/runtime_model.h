@@ -843,6 +843,7 @@ struct Model {
   uint8_t pages = 1;
   size_t count = 0;
   std::string title = screen_text::tr(screen_text::txt::status_choose_tiles);
+  uint32_t home_icon = 0;  // screen-wide top-bar override; zero restores the Tessera mark
   page_protocol::Pages page_data;
   // What the top bar says on `page`, counted from 0.
   const std::string &title_of(int page) const {
@@ -878,6 +879,7 @@ struct Model {
     pages = page_count;
     // An empty title stays empty (firmware 0.17.0+): the top bar then shows its home key alone. Before, it said "Home".
     title = name;
+    home_icon = 0;
     refusal.clear();
     return true;
   }

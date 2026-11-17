@@ -2612,7 +2612,9 @@
         "copy": "Deze balk naar andere pagina's kopiëren",
         "copy_hint": "De items, of de hele balk met de titel",
         "page_settings": "Instellingen van {page}"
-      }
+      },
+      "home_icon_default": "Tessera (standaard)",
+      "home_icon_hint": "Home-pictogram voor alle pagina’s van dit scherm. Vereist bijgewerkte firmware."
     },
     "screen_settings": {
       "groups": {

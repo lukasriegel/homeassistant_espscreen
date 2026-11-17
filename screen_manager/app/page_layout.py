@@ -443,7 +443,9 @@ def validate_document(data, grid):
     validator would change an incompatible combination, refuse it instead of
     silently changing the canonical document's appearance or footprint.
     """
-    _object(data, {"title", "homePageId", "pages"}, {"title", "homePageId", "pages"})
+    _object(data, {"title", "homeIcon", "homePageId", "pages"}, {"title", "homePageId", "pages"})
+    if "homeIcon" in data and (not isinstance(data["homeIcon"], str) or data["homeIcon"] not in tile_icons.ICONS):
+        raise LayoutError(t('addon.errors.top_bar.invalid_setting'))
     pages = data["pages"]
     if not isinstance(pages, list) or not 1 <= len(pages) <= grid.pages:
         raise LayoutError(t('addon.errors.pages.pages_full'))

@@ -79,7 +79,7 @@ const cells = computed(() => Math.min(12, (doc.documentGrid?.columns || 2) * (do
       <div class="page-anchor">
         <div class="mini-page" role="tablist" :aria-label="t('editor.page.label', { page: index + 1 })" :style="{ '--cols': doc.documentGrid?.columns || 2 }">
           <button type="button" class="mini-bar" id="page-edit-topbar" :aria-label="t('editor.pages.edit_topbar')" :title="t('editor.pages.edit_topbar')" @click="insp.openBar(-1, index)">
-            <span class="bar-preview"><TopbarSvg :items="barItems" :name-text="pageTitleShown(index)" :home="topbar.homeKeyShown(index)" /></span>
+            <span class="bar-preview"><TopbarSvg :items="barItems" :name-text="pageTitleShown(index)" :home="topbar.homeKeyShown(index)" :home-icon="doc.document?.homeIcon" /></span>
             <Icon name="chevron-right" />
           </button>
           <button type="button" role="tab" class="mini-tiles" id="page-part-page" :aria-selected="part === 'page' ? 'true' : 'false'" :title="t('editor.pages.part_page')" @click="insp.pagePart = 'page'">

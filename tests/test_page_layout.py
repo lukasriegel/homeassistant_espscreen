@@ -13,6 +13,18 @@ from layout_migrations import migrate_legacy
 
 
 class PageLayoutTests(unittest.TestCase):
+    def test_home_icon_survives_validation_and_is_independent_per_screen(self):
+        record = self.migrate({'title': 'Screen', 'tiles': []})
+        original = deepcopy(record['layout'])
+        record['layout']['homeIcon'] = 'home'
+        checked = validate_document(record['layout'], Grid())
+        self.assertEqual(checked['homeIcon'], 'home')
+        self.assertNotIn('homeIcon', original)
+        for invalid in ('auto', 'none', 'unknown', 123, None):
+            record['layout']['homeIcon'] = invalid
+            with self.assertRaises(LayoutError):
+                validate_document(record['layout'], Grid())
+
     def migrate(self, value, grid=None):
         counter = itertools.count(1)
         return migrate_legacy(value, grid or Grid(), lambda: f"{next(counter):016x}")

@@ -4,6 +4,13 @@ App 0.3.1 stores each page as a complete unit: its tiles, top bar, navigation ch
 
 ## Editing
 
+In **Edit top bar**, select the title and Home control on the left to choose a header icon from the
+icon library. The icon belongs to this screen and appears on all its pages. Choose **Tessera (default)**
+to restore the original mark. The leading control still goes Home, and detail pages still show Back.
+The add-on stores the optional `homeIcon` in the screen's page document and sends its codepoint only
+when the firmware's hello advertises `home_icon`. Existing documents and older firmware keep Tessera.
+This reuses the existing icon font and image slot, with no additional font or picture allocation.
+
 The toolbar above the pages switches between two views, **Row** and **Map**, and holds Undo, Redo, **Preview**, **Add page** and a **?** with a short how-to.
 
 **Row** is the default: the pages side by side, as you swipe through them on the screen. Drag entities from the library onto the page grid, or select an empty cell and add an entity. Each page has a header with its number, its title, a **Home** label on the Home page and one **···** menu: **Page settings**, **Edit top bar**, **Set as Home**, **Duplicate page**, **New empty page with this top bar** and **Remove page**. Page settings hold the page title (the screen title, which every page without its own title shows, is one click under it), **Set as Home**, **Show in page dots and swipe navigation**, **Show a Home control on this page**, the page order and the page's top bar. Every page can have different top-bar items. Copying a bar creates independent items on the chosen pages.

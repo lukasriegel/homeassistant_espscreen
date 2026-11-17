@@ -22,7 +22,10 @@ int main() {
   assert(m.ready() && m.accepts(0, "light.a"));
   assert(!m.accepts(10, "light.a") && !m.accepts(0, "light.removed"));
   // Beginning a replacement clears old states after reserving the new buffers.
+  m.home_icon = 0xF02DC;
+  assert(!m.begin(0, 0, "Invalid") && m.home_icon == 0xF02DC);
   assert(m.begin(12, 3, "Twelve") && m.tiles.size() == 12 && m.count == 12);
+  assert(m.home_icon == 0);
   assert(!m.configured && m.tiles[0].state.empty());
   assert(m.begin(48, 8, "Maximum") && m.count == 48 && m.page_data.records.size() == 8);
   assert(!m.begin(49, 8, "Too many") && !m.configured && m.count == 48);

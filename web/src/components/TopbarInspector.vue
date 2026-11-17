@@ -94,6 +94,12 @@ function update(patch: Partial<HeaderItem>) {
   list[props.index] = { ...list[props.index], ...patch };
   topbar.setTopbarItems(list);
 }
+function setHomeIcon(name: string) {
+  doc.editDocument((draft) => {
+    if (name === 'auto') delete draft.homeIcon;
+    else draft.homeIcon = name;
+  }, 'homeIcon');
+}
 // The line under the chosen part's name: where it stands, or why the screen doesn't show it right now.
 const where = computed(() => {
   const it = item.value;
@@ -140,7 +146,7 @@ function move(step: number) { if (topbar.moveTopbarItem(props.index, props.index
     <div class="bar-anchor">
       <div v-if="!scr.pageReady" class="notice warn"><Icon name="alert-circle-outline" /><span class="notice-text">{{ t('editor.pages.shared_bar') }}</span></div>
       <BarStrip id="topbar-chips" :items="items" :selected="copying ? '' : selected" :overflow="overflow" :title="pageTitleShown(page) || region.screenText('editor.mockup.home')"
-        :home="topbar.homeKeyShown(page)" :full="items.length >= scr.topbarMax" :max="scr.topbarMax" :dragging="drag.active ? drag.index : -1" :leaving="drag.away"
+        :home="topbar.homeKeyShown(page)" :home-icon="doc.document?.homeIcon" :full="items.length >= scr.topbarMax" :max="scr.topbarMax" :dragging="drag.active ? drag.index : -1" :leaving="drag.away"
         @select="choose" @press="(e, i) => sort.down(e, i)" @remove="topbar.removeTopbarItem" />
       <small v-if="overflow.size > 0 || !supported" id="topbar-hint" class="help warn">{{ supported ? t("editor.topbar.hint.overflow") : t("editor.topbar.hint.needs_firmware", { version: needed }) }}</small>
       <!-- What is chosen in the bar, named once. -->
@@ -219,6 +225,8 @@ function move(step: number) { if (topbar.moveTopbarItem(props.index, props.index
       </template>
       <!-- The left side: the title and the Home button are the page's, set in its settings. -->
       <template v-else>
+        <IconPicker v-if="doc.document" :selected="doc.document.homeIcon || 'auto'" automatic="" :auto-label="t('editor.topbar.home_icon_default')"
+          :note="t('editor.topbar.home_icon_hint')" :allow-none="false" @pick="setHomeIcon" />
         <button type="button" class="nav-row" :disabled="!pageId" @click="toPage">
           <span class="tx"><b>{{ pageTitleShown(page) || region.screenText("editor.mockup.home") }}</b><small>{{ t('editor.topbar.left_hint') }}</small></span>
           <Icon name="chevron-right" class="nav-row-chevron" />

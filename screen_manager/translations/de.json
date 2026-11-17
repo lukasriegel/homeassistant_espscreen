@@ -3047,7 +3047,9 @@
         "copy": "Diese Leiste auf andere Seiten kopieren",
         "copy_hint": "Ihre Elemente oder die ganze Leiste mit Titel",
         "page_settings": "Einstellungen von {page}"
-      }
+      },
+      "home_icon_default": "Tessera (Standard)",
+      "home_icon_hint": "Home-Symbol für alle Seiten dieses Bildschirms. Erfordert aktualisierte Firmware."
     },
     "screen_settings": {
       "groups": {

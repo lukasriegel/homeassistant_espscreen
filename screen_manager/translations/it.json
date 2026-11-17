@@ -3047,7 +3047,9 @@
         "copy": "Copia questa barra su altre pagine",
         "copy_hint": "I suoi elementi, o tutta la barra con il titolo",
         "page_settings": "Impostazioni di {page}"
-      }
+      },
+      "home_icon_default": "Tessera (predefinito)",
+      "home_icon_hint": "Icona Home per tutte le pagine di questo schermo. Richiede firmware aggiornato."
     },
     "screen_settings": {
       "groups": {

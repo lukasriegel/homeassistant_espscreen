@@ -3047,7 +3047,9 @@
         "copy": "Copier cette barre vers d'autres pages",
         "copy_hint": "Ses éléments, ou toute la barre avec son titre",
         "page_settings": "Réglages de {page}"
-      }
+      },
+      "home_icon_default": "Tessera (par défaut)",
+      "home_icon_hint": "Icône d’accueil pour toutes les pages de cet écran. Nécessite un firmware à jour."
     },
     "screen_settings": {
       "groups": {

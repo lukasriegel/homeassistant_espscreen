@@ -3047,7 +3047,9 @@
         "copy": "Sáv másolása más oldalakra",
         "copy_hint": "Az elemei, vagy az egész sáv a címmel",
         "page_settings": "{page} beállításai"
-      }
+      },
+      "home_icon_default": "Tessera (alapértelmezett)",
+      "home_icon_hint": "Kezdőlapikon a képernyő összes oldalához. Frissített firmware szükséges."
     },
     "screen_settings": {
       "groups": {

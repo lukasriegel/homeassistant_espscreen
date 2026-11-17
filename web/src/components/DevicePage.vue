@@ -157,7 +157,7 @@ async function onKey(e: KeyboardEvent) {
     <div class="device" :class="{ compact: canvas.isCompact, roomy: canvas.roomyNames }">
       <div class="bar-wrap" :class="{ selected: !preview && barSelected }" :title="preview ? undefined : t('editor.page.edit_bar')" :role="preview ? undefined : 'button'" :tabindex="preview ? undefined : 0"
         @click="!preview && insp.openBar(0, page)" @keydown.enter.prevent="!preview && insp.openBar(0, page)">
-        <TopbarSvg :items="topbar.topbarItems(page)" :name-text="pageTitleShown(page)" :home="topbar.homeKeyShown(page)" :back="backInHeader" />
+        <TopbarSvg :items="topbar.topbarItems(page)" :name-text="pageTitleShown(page)" :home="topbar.homeKeyShown(page)" :home-icon="doc.document?.homeIcon" :back="backInHeader" />
         <button v-if="preview && (backInHeader || topbar.homeKeyShown(page))" type="button" class="preview-home" :aria-label="backInHeader ? region.screenText('screen.navigation.back') : t('editor.pages.go_home')" @click.stop="emit('navigate', { kind: backInHeader ? 'back' : 'home' })"></button>
       </div>
       <div class="tiles">

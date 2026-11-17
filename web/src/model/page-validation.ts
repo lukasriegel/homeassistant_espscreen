@@ -56,7 +56,8 @@ const finite = (value: any): boolean => typeof value === 'number' ? Number.isFin
 // Plugin tiles and items are an experiment: the add-on accepts them only once it serves plugins (docs: the plugins
 // proposal), which `plugins` says (the plugins store's pluginsEnabled, handed in with the grid, model/pages.ts).
 export function validatePageShape(layout: PageLayout, plugins = false) {
-  fields(layout, ['title', 'homePageId', 'pages']);
+  fields(layout, ['title', 'homeIcon', 'homePageId', 'pages'], ['title', 'homePageId', 'pages']);
+  if (layout.homeIcon !== undefined && !rules.icons.includes(layout.homeIcon)) fail();
   // An empty title is a screen without one (firmware 0.17.0+): the top bar shows its home key alone.
   if (typeof layout.title !== 'string' || layout.title !== layout.title.trim() || bytes(layout.title) > 96)
     throw new Error(t('addon.errors.layout.title'));

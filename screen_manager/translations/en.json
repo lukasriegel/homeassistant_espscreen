@@ -2612,7 +2612,9 @@
         "copy": "Copy this bar to other pages",
         "copy_hint": "Its items, or the whole bar with its title",
         "page_settings": "Settings of {page}"
-      }
+      },
+      "home_icon_default": "Tessera (default)",
+      "home_icon_hint": "Home icon for all pages of this screen. Requires updated firmware."
     },
     "screen_settings": {
       "groups": {

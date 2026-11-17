@@ -3047,7 +3047,9 @@
         "copy": "Kopiuj ten pasek na inne strony",
         "copy_hint": "Jego elementy albo cały pasek z tytułem",
         "page_settings": "Ustawienia: {page}"
-      }
+      },
+      "home_icon_default": "Tessera (domyślna)",
+      "home_icon_hint": "Ikona strony głównej dla wszystkich stron tego ekranu. Wymaga aktualnego oprogramowania."
     },
     "screen_settings": {
       "groups": {

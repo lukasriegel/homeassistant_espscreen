@@ -159,6 +159,8 @@ std::string receive(const std::string &payload) {
           !root["keepalive"].is<unsigned>() || root["keepalive"].as<unsigned>() < 5 || root["keepalive"].as<unsigned>() > 3600)
         return false;
       const bool was_active = transfer.active && model.ready();
+      if (!root["home_icon"].isNull() && (!root["home_icon"].is<uint32_t>() ||
+          root["home_icon"].as<uint32_t>() < 0xF0000 || root["home_icon"].as<uint32_t>() > 0xFFFFD)) return false;
       auto candidate = transfer;
       const auto begin = candidate.begin(revision, root["pages"].as<unsigned>(), root["tiles"].as<unsigned>());
       if (begin == page_protocol::Begin::reject) return false;
@@ -199,6 +201,7 @@ std::string receive(const std::string &payload) {
       last_received = esphome::millis();
       keepalive_seconds = root["keepalive"].as<unsigned>();
       model.page_data.home = root["home"].as<unsigned>();
+      model.home_icon = root["home_icon"].is<uint32_t>() ? root["home_icon"].as<uint32_t>() : 0;
       inbox = string(root["inbox"], 160);
       layout_rev = protocol_key(revision);
       if (root["clock_24h"].is<bool>()) settings_screen::set("clock_24h", root["clock_24h"].as<bool>() ? 1 : 0);

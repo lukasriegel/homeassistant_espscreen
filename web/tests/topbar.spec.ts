@@ -3,6 +3,20 @@ import { describe, expect, it } from "vitest";
 import { agoText, LOOK_BARS, barGaps, barLayout, barMetricsFor, clockText, dateText, dotted, itemKey } from "../src/model/topbar";
 import type { HeaderItem } from "../src/types";
 
+describe('screen-wide Home icon', () => {
+  it('replaces the mark, preserves its slot, and leaves Back unchanged', () => {
+    const view = () => ({ text: '', shown: true, icon: '' });
+    const normal = barLayout([], LOOK_BARS.compact, 'Home', view, true);
+    const custom = barLayout([], LOOK_BARS.compact, 'Home', view, true, false, 'F02DC');
+    const back = barLayout([], LOOK_BARS.compact, 'Home', view, true, true, 'F02DC');
+    expect(normal.key?.mark).toBe(true);
+    expect(custom.key?.mark).toBe(false);
+    expect(custom.key?.glyph).toBe(String.fromCodePoint(0xF02DC));
+    expect(custom.homeShift).toBe(normal.homeShift);
+    expect(back.key?.glyph).toBe(String.fromCodePoint(0xF0141));
+  });
+});
+
 describe("words for the time since a change", () => {
   const now = 1_000_000;
   it("uses the firmware's thresholds and wording", () => {

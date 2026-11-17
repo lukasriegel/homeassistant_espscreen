@@ -157,6 +157,8 @@ def prepare(inbox, record, region, values, bars, bar=()):
     live_values = [tile_message(value, tile, initial=False) for value, tile in zip(values, tiles)]
     begin = {"op": "begin", "inbox": inbox, "title": record["layout"]["title"], "pages": len(pages),
              "tiles": len(tiles), "home": next(i for i, p in enumerate(pages) if p["id"] == record["layout"]["homePageId"]), **region}
+    if record["layout"].get("homeIcon") in tile_icons.GLYPHS:
+        begin["home_icon"] = int(tile_icons.GLYPHS[record["layout"]["homeIcon"]], 16)
     for message in [begin, *initial_tiles, *initial_bars, *live_values]:
         bounded({**message, "v": PROTOCOL, "session": "0" * 16, "seq": 0xFFFFFFFF, "rev": revision})
     return begin, initial_tiles, initial_bars, live_values
@@ -485,6 +487,8 @@ class Sender:
                     self.phase = "applying"
                     if await self._hello() != PROTOCOL:
                         raise Refused(english('editor.pages.update_notice'))
+                    if "home_icon" not in self.features:
+                        begin.pop("home_icon", None)
                     # Tiles of the top bar only to a screen that still names them: one flashed back to an older firmware
                     # gets the layout without them on the next round, which its hello now decides.
                     if bar and BAR_CARDS_FEATURE not in self.features:

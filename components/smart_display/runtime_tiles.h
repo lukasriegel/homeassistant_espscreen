@@ -9852,7 +9852,7 @@ inline void draw_header(bool live) {
   const auto leading = !record ? Leading::none : header_back() ? Leading::back
                      : record->home_control && settings_screen::home_button ? Leading::home : Leading::none;
   page_header::View view{record ? record->bar : empty, header_name, now_time ? now_time() : esphome::ESPTime{},
-                         now_epoch(), leading, live, screen_settings::current.clock_24h != 0, header_device()};
+                         now_epoch(), leading, live, screen_settings::current.clock_24h != 0, header_device(), model.home_icon};
   header_renderer.draw({room_label, time_label, tile_grid, settings_screen::hold_area,
                         header_text_font, header_icon_font, header_home_mark, header_back_font, header_status_font},
                        view, []() {

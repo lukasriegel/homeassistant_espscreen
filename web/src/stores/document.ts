@@ -637,6 +637,8 @@ export const useDocumentStore = defineStore("document", () => {
     if (other?.page_document?.format !== "pages-v2") { ui.toast(t("editor.layout.copy_needs_migration")); return; }
     const copy = pages.clone(other.page_document);
     copy.layout.title = document.value?.title || copy.layout.title;
+    if (document.value?.homeIcon) copy.layout.homeIcon = document.value.homeIcon;
+    else delete copy.layout.homeIcon;
     adopt(copy, t("editor.layout.copied", { name: other.name }), label("layout_copied", { name: other.name }));
   }
   const layoutJson = () => {

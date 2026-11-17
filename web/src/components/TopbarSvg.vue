@@ -16,14 +16,14 @@ const topbar = useTopbarStore();
 const canvas = useCanvasStore();
 
 // `metrics`: another screen's bar, for that screen's home page on the overview (app 0.4.0).
-const props = defineProps<{ items: any[]; nameText?: string; single?: boolean; home?: boolean; back?: boolean; metrics?: BarMetrics }>();
+const props = defineProps<{ items: any[]; nameText?: string; single?: boolean; home?: boolean; homeIcon?: string; back?: boolean; metrics?: BarMetrics }>();
 
 const lay = computed(() => {
   void ui.fontsVersion;
   void ui.now;
   void entities.topbarPreviews;
   return barLayout(props.items, props.metrics ?? canvas.barMetrics, props.nameText ?? '', topbar.topbarView,
-                   Boolean(props.home) && !props.single, Boolean(props.back) && !props.single);
+                   Boolean(props.home) && !props.single, Boolean(props.back) && !props.single, entities.iconNamed(props.homeIcon)?.cp);
 });
 const m = computed(() => lay.value.metrics);
 const height = computed(() => (props.single ? Math.round(m.value.text * 1.4) : m.value.top + Math.round(m.value.name * 0.45)));

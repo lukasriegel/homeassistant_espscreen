@@ -17,10 +17,12 @@ import UiContextMenu from "./ui/UiContextMenu.vue";
 import UiMenuItem from "./ui/UiMenuItem.vue";
 import TesseraMark from "./TesseraMark.vue";
 import { useTopbarStore } from "../stores/topbar";
+import { useEntitiesStore } from "../stores/entities";
 
 const topbar = useTopbarStore();
+const entities = useEntitiesStore();
 export type StripFace = { glyph: string; text: string; color?: string; shown: boolean };
-const props = defineProps<{ items: readonly HeaderItem[]; selected: string; overflow: ReadonlySet<number>; title: string; home: boolean; full: boolean; max: number; dragging: number;
+const props = defineProps<{ items: readonly HeaderItem[]; selected: string; overflow: ReadonlySet<number>; title: string; home: boolean; homeIcon?: string; full: boolean; max: number; dragging: number;
   /** The dragged item is pulled off the strip: let go, it is taken off. */
   leaving?: boolean;
   face?: (item: HeaderItem) => StripFace; label?: string; leftTitle?: string; addTitle?: string; addId?: string; saver?: boolean }>();
@@ -47,7 +49,8 @@ const justAdded = (item: HeaderItem) => topbar.topbarAdded?.key === itemKey(item
   <TabsRoot :model-value="selected" activation-mode="automatic" @update:model-value="(value) => emit('select', String(value))">
     <TabsList class="bar-strip" :class="{ wrap, saver }" :aria-label="label || t('editor.topbar.title')">
       <TabsTrigger value="left" class="strip-slot strip-left" :title="leftTitle || t('editor.topbar.strip.left_title')">
-        <TesseraMark v-if="home" class="strip-home" />
+        <span v-if="home && entities.iconNamed(homeIcon)" class="mdi strip-home" aria-hidden="true">{{ glyph(entities.iconNamed(homeIcon)!.cp) }}</span>
+        <TesseraMark v-else-if="home" class="strip-home" />
         <span class="strip-title">{{ title }}</span>
         <small v-if="wrap" class="strip-count">{{ t('editor.topbar.items', { used: items.length }, max) }}</small>
       </TabsTrigger>

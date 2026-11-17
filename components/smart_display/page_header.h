@@ -96,6 +96,7 @@ struct View {
   Leading leading;
   bool live, clock_24h;
   header_bar::Device device{};  // what the screen's own items read (firmware 0.38.0)
+  uint32_t home_icon = 0;
 };
 class Renderer {
   void (*leading_action)() = nullptr;
@@ -324,8 +325,10 @@ public:
     width = std::max(0, page_w + static_cast<int>(lv_obj_get_style_x(time_label, LV_PART_MAIN)) - left);
     bool home_on = false, mark_on = false;
     const bool back = view.leading == Leading::back;
-    const bool draw_mark = header_home_mark && !back;
-    const uint32_t leading_glyph = back ? 0xF0141 : HOME_GLYPH;
+    lv_font_glyph_dsc_t custom{};
+    const bool custom_icon = view.home_icon && lv_font_get_glyph_dsc(header_icon_font, &custom, view.home_icon, 0) && custom.box_w;
+    const bool draw_mark = header_home_mark && !back && !custom_icon;
+    const uint32_t leading_glyph = back ? 0xF0141 : custom_icon ? view.home_icon : HOME_GLYPH;
     const lv_font_t *leading_font = back && surface.back_font ? surface.back_font : header_icon_font;
     lv_font_glyph_dsc_t leading{};
     if (view.leading != Leading::none && slot_w && slot_h &&

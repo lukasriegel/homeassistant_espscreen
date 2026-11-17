@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Each screen can choose its own Home icon in Edit top bar, replacing the Tessera mark across its pages. Choose Tessera (default) to restore it. Requires firmware with custom header icon support.
+
 - Long settings groups scroll vertically below a fixed header. Entity detail, colour-light and effects pages also gain scrolling when their fitted content still exceeds the screen. Physical gesture acceptance is pending.
 
 - Colour light controls shrink their rows on dense compact screens so the brightness slider stays visible below colour and temperature.

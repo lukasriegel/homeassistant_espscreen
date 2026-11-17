@@ -168,7 +168,7 @@ export type BarLayout = ReturnType<typeof barLayout>;
 // Back (mdi:chevron-left) takes the mark's slot.
 export const BACK_GLYPH = "F0141";
 export function barLayout(items: HeaderItem[], metrics: BarMetrics, nameText: string, viewOf: (item: HeaderItem) => ItemView,
-                          home = false, back = false) {
+                          home = false, back = false, homeIcon?: string) {
   const fonts = barFonts(metrics);
   // The firmware reads the digit height as a whole number of pixels (the glyph box of "0").
   const zero = inkOf("0", fonts.text), cap = Math.round(zero.bottom - zero.top), gaps = barGaps(cap);
@@ -186,7 +186,8 @@ export function barLayout(items: HeaderItem[], metrics: BarMetrics, nameText: st
   });
   const shown = parts.filter((p) => p.shown);
   // The home key takes the name's place and the name moves behind it; the items on the right keep every pixel.
-  const key = home || back ? { mark: !back, size: metrics.mark, glyph: glyph(BACK_GLYPH), ink: inkOf(glyph(BACK_GLYPH), fonts.icon) } : null;
+  const leadingGlyph = glyph(back ? BACK_GLYPH : homeIcon || BACK_GLYPH);
+  const key = home || back ? { mark: !back && !homeIcon, size: metrics.mark, glyph: leadingGlyph, ink: inkOf(leadingGlyph, fonts.icon) } : null;
   const homeShift = key ? key.size + metrics.inset : 0;
   const width = Math.max(0, metrics.width - homeShift);
   const natural = inkOf(nameText, fonts.name).advance;

@@ -742,6 +742,7 @@ api:
                     // bar_cards (firmware 0.56.0): an entity's item in the top bar opens its tile's card (hold_card), so ESP
                     // Screens names that tile in the item (`d`) and sends a tile without a cell for an entity on no tile.
                     features.add("bar_cards");
+                    features.add("home_icon");
                     // clock_faces (module clock_faces, tier full): the screensaver's clock draws Glass, Classic and Bauhaus,
                     // so ESP Screens sends the face chosen for it (`cf` of the op "saver").
                     #ifdef SD_MOD_CLOCK_FACES
